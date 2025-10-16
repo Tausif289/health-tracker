@@ -1,0 +1,22 @@
+<div class="login-container">
+  <div class="login-form-container">
+    <h2>{{ isLoginMode ? 'Login' : 'Sign Up' }}</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" formControlName="email" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="password" />
+      </div>
+      <button type="submit" class="btn btn-primary">{{ isLoginMode ? 'Login' : 'Sign Up' }}</button>
+    </form>
+    <p>
+      {{ isLoginMode ? 'Don\'t have an account?' : 'Already have an account?' }}
+      <a (click)="toggleMode()" class="toggle-link">
+        {{ isLoginMode ? 'Sign up' : 'Login' }}
+      </a>
+    </p>
+  </div>
+</div>

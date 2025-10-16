@@ -1,0 +1,93 @@
+<div class="add-activity-container">
+
+  <!-- Search and Results -->
+  <div class="activity-search-card">
+    <div class="card-header">
+      <h1>Add Activity</h1>
+      <p>Find activities and add them to your log.</p>
+    </div>
+
+    <div class="search-controls">
+      <input
+        type="text"
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+        placeholder="Search for an activity (e.g., running)"
+        class="search-input"
+      />
+    </div>
+
+    <div class="activity-list">
+      @for (activity of filteredActivities(); track activity.name) {
+        <div class="activity-item">
+          <div class="activity-info">
+            <h3>{{ activity.name }}</h3>
+            <p>{{ activity.caloriesPerMinute }} kcal per minute</p>
+          </div>
+          <button class="btn btn-icon" (click)="openDurationModal(activity)" aria-label="Add {{activity.name}}">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+      } @empty {
+        <p class="empty-state">No activities found matching your search.</p>
+      }
+    </div>
+  </div>
+
+  <!-- Selected Activities -->
+  <div class="selected-activities-card">
+    <div class="card-header">
+      <h2>Selected Activities ({{ selectedActivities().length }})</h2>
+      <button class="btn btn-primary" (click)="addAllToDashboard()" [disabled]="selectedActivities().length === 0">
+        Add to Dashboard
+      </button>
+    </div>
+
+    @if (selectedActivities().length > 0) {
+      <div class="total-calories">
+        <strong>Total Burned: {{ totalCaloriesBurned() }} kcal</strong>
+      </div>
+    }
+
+    <div class="selected-activities-list">
+      @for (activity of selectedActivities(); track activity.name) {
+        <div class="selected-activity-item">
+          <div class="activity-info">
+            <h3>{{ activity.name }}</h3>
+            <p>{{ activity.caloriesBurned }} kcal</p>
+          </div>
+          <button class="btn btn-icon btn-danger" (click)="removeActivity(activity.name)" aria-label="Remove {{activity.name}}">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      } @empty {
+        <p class="empty-state">No activities added yet.</p>
+      }
+    </div>
+  </div>
+
+</div>
+
+<!-- Duration Modal -->
+@if (isModalVisible()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h2>Set Duration for {{ activityToEdit()?.name }}</h2>
+      <div class="duration-input-group">
+        <label for="duration">Duration (minutes):</label>
+        <input
+          type="number"
+          id="duration"
+          [ngModel]="duration()"
+          (ngModelChange)="duration.set($event)"
+          min="1"
+          class="duration-input"
+        />
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" (click)="addActivityToList()">Add Activity</button>
+        <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+}

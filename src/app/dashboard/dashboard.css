@@ -1,0 +1,233 @@
+:host {
+  display: block;
+  padding: 2rem;
+  background-color: var(--background-color);
+  min-height: calc(100vh - 70px);
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.dashboard-card {
+  background-color: var(--card-background);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07), 0 3px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.card-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Calorie Goal Card */
+.calorie-goal-card {
+  align-items: center;
+}
+
+.calorie-progress-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-ring__circle {
+  transition: stroke-dashoffset 0.5s ease-in-out;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.progress-text {
+  position: absolute;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.progress-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1;
+}
+
+.progress-label {
+  font-size: 1rem;
+  color: #888;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.progress-details {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  color: #aaa;
+  text-transform: uppercase;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+
+/* Summary Card */
+.summary-card {
+    justify-content: space-around;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.summary-icon {
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.intake-icon { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.burned-icon { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; }
+.remaining-icon { background-color: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+
+.summary-details p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.summary-details h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* Meals & Activities Cards */
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.item-row:last-child {
+  border-bottom: none;
+}
+
+.meal-section {
+    margin-bottom: 1.5rem;
+}
+
+.meal-section:last-child {
+    margin-bottom: 0;
+}
+
+.meal-section h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
+}
+
+.empty-text {
+  text-align: center;
+  color: #888;
+  padding: 1rem;
+}
+
+.activity-name {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn {
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+
+/* Responsive Grid Adjustments */
+@media (min-width: 992px) {
+    .main-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .calorie-goal-card {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+    }
+    .summary-card {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+    }
+    .meals-card {
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+    }
+    .activities-card {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+    }
+}

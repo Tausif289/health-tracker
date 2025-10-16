@@ -1,0 +1,65 @@
+<div class="goal-tracking-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Weight Goals</h2>
+      <p>Set your initial, current, and target weights.</p>
+    </div>
+    <div class="goal-inputs">
+      <div class="input-group">
+        <label for="initialWeight">Initial Weight (kg)</label>
+        <input id="initialWeight" type="number" [(ngModel)]="initialWeight">
+      </div>
+      <div class="input-group">
+        <label for="currentWeight">Current Weight (kg)</label>
+        <input id="currentWeight" type="number" [(ngModel)]="currentWeight">
+      </div>
+      <div class="input-group">
+        <label for="targetWeight">Target Weight (kg)</label>
+        <input id="targetWeight" type="number" [(ngModel)]="targetWeight">
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="saveGoals()">Save Goals</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Your Progress</h2>
+    </div>
+    <p class="progress-text">You are <strong>{{ progress().toFixed(2) }}%</strong> of the way to your goal!</p>
+    <div class="progress-bar-container">
+      <div class="progress-bar" [style.width.%]="progress()"></div>
+    </div>
+    <div class="average-loss">
+      <p>Average Weekly Loss: <strong>{{ averageWeeklyLoss() }} kg</strong></p>
+    </div>
+  </div>
+
+  <div class="card full-width-card">
+    <div class="card-header">
+      <h2>Weekly Weight Tracking</h2>
+    </div>
+    <div class="add-entry-form">
+      <input type="number" [(ngModel)]="newWeekWeight" placeholder="Enter this week's weight">
+      <button class="btn btn-secondary" (click)="addWeeklyWeight()">Add Entry</button>
+    </div>
+
+    @if (weeklyWeightLog().length > 0) {
+      <div class="weight-log-table">
+        <div class="table-header">
+          <div>Week</div>
+          <div>Weight (kg)</div>
+        </div>
+        <div class="table-body">
+          @for (entry of weeklyWeightLog(); track entry.week) {
+            <div class="table-row">
+              <div>{{ entry.week }}</div>
+              <div>{{ entry.weight }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <p class="empty-state">No weekly weight entries yet.</p>
+    }
+  </div>
+</div>

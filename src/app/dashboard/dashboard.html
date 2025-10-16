@@ -1,0 +1,138 @@
+<div class="dashboard-container">
+  <div class="main-grid">
+    <div class="dashboard-card calorie-goal-card">
+      <div class="card-header">
+        <h2>Calorie Goal</h2>
+      </div>
+      <div class="calorie-progress-container">
+        <svg class="progress-ring" width="200" height="200">
+          <circle
+            class="progress-ring__circle-bg"
+            stroke="#eee"
+            stroke-width="15"
+            fill="transparent"
+            r="85"
+            cx="100"
+            cy="100"
+          />
+          <circle
+            class="progress-ring__circle"
+            stroke="var(--primary-color)"
+            stroke-width="15"
+            [attr.stroke-dasharray]="2 * 3.14159 * 85"
+            [attr.stroke-dashoffset]="(100 - progress) / 100 * (2 * 3.14159 * 85)"
+            fill="transparent"
+            r="85"
+            cx="100"
+            cy="100"
+          />
+        </svg>
+        <div class="progress-text">
+          <div class="progress-value">{{ remainingCalories() }}</div>
+          <div class="progress-label">Remaining</div>
+          <div class="progress-details">
+            <div class="detail-item">
+              <span class="detail-label">Intake</span>
+              <span class="detail-value">{{ intakeCalories() }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Burned</span>
+              <span class="detail-value">{{ burnedCalories() }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-card summary-card">
+        <div class="summary-item">
+            <div class="summary-icon intake-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <div class="summary-details">
+                <p>Intake</p>
+                <h3>{{ intakeCalories() }} kcal</h3>
+            </div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-icon burned-icon">
+                <i class="fas fa-fire"></i>
+            </div>
+            <div class="summary-details">
+                <p>Burned</p>
+                <h3>{{ burnedCalories() }} kcal</h3>
+            </div>
+        </div>
+        <div class="summary-item">
+            <div class="summary-icon remaining-icon">
+                <i class="fas fa-balance-scale"></i>
+            </div>
+            <div class="summary-details">
+                <p>Remaining</p>
+                <h3>{{ remainingCalories() }} kcal</h3>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="dashboard-card meals-card">
+      <div class="card-header">
+        <h2>Today's Meals</h2>
+        <a routerLink="/add-food" class="btn btn-sm btn-primary">+ Add Food</a>
+      </div>
+      <div class="meal-sections">
+        <div class="meal-section">
+          <h4><i class="fas fa-sun"></i> Breakfast</h4>
+          @for (item of breakfastItems(); track item.name) {
+            <div class="item-row">
+              <span>{{ item.name }}</span>
+              <span>{{ item.calories }} kcal</span>
+            </div>
+          } @empty {
+            <p class="empty-text">No breakfast items yet.</p>
+          }
+        </div>
+        <div class="meal-section">
+          <h4><i class="fas fa-cloud-sun"></i> Lunch</h4>
+          @for (item of lunchItems(); track item.name) {
+            <div class="item-row">
+              <span>{{ item.name }}</span>
+              <span>{{ item.calories }} kcal</span>
+            </div>
+          } @empty {
+            <p class="empty-text">No lunch items yet.</p>
+          }
+        </div>
+        <div class="meal-section">
+          <h4><i class="fas fa-moon"></i> Dinner</h4>
+          @for (item of dinnerItems(); track item.name) {
+            <div class="item-row">
+              <span>{{ item.name }}</span>
+              <span>{{ item.calories }} kcal</span>
+            </div>
+          } @empty {
+            <p class="empty-text">No dinner items yet.</p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-card activities-card">
+      <div class="card-header">
+        <h2>Today's Activities</h2>
+        <a routerLink="/add-activity" class="btn btn-sm btn-secondary">+ Add Activity</a>
+      </div>
+        @for (activity of todaysActivities(); track activity.name) {
+          <div class="item-row activity-row">
+              <div class="activity-name">
+                  <i class="fas fa-running"></i>
+                  <span>{{ activity.name }}</span>
+              </div>
+              <span>{{ activity.caloriesBurned }} kcal</span>
+          </div>
+        } @empty {
+          <p class="empty-text">No activities logged yet.</p>
+        }
+    </div>
+  </div>
+</div>

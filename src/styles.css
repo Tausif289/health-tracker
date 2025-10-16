@@ -1,1 +1,43 @@
-/* You can add global styles to this file, and also import other style files */
+
+/* Global Styles */
+:root {
+  --primary-color: #007bff;
+  --background-color-dark: #121212;
+  --card-background-dark: #1e1e1e;
+  --text-color-dark: #e0e0e0;
+  --border-color-dark: #2c2c2c;
+
+  --background-color-light: #f8f9fa;
+  --card-background-light: #ffffff;
+  --text-color-light: #212529;
+  --border-color-light: #dee2e6;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+}
+
+body.dark-mode {
+  --background-color: var(--background-color-dark);
+  --card-background: var(--card-background-dark);
+  --text-color: var(--text-color-dark);
+  --border-color: var(--border-color-dark);
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+body.light-mode {
+  --background-color: var(--background-color-light);
+  --card-background: var(--card-background-light);
+  --text-color: var(--text-color-light);
+  --border-color: var(--border-color-light);
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}

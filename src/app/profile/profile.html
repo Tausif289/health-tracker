@@ -1,0 +1,32 @@
+<div class="profile-container">
+  @if (user(); as user) {
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-picture-container">
+          <img [src]="user.photoURL" alt="Profile Picture" class="profile-picture" />
+        </div>
+        <h2>{{ user.displayName || 'No Name' }}</h2>
+        <p>{{ user.email }}</p>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="profile-form">
+        <div class="form-group">
+          <label for="displayName">Display Name</label>
+          <input type="text" id="displayName" formControlName="displayName" />
+        </div>
+        <div class="form-group">
+          <label for="photoURL">Photo URL</label>
+          <input type="text" id="photoURL" formControlName="photoURL" />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="btn btn-primary">Update Profile</button>
+          <button type="button" (click)="signOut()" class="btn btn-danger">Sign Out</button>
+        </div>
+      </form>
+    </div>
+  } @else {
+    <div class="loading-container">
+      <p>Loading...</p>
+    </div>
+  }
+</div>
