@@ -1,1 +1,23 @@
-/* No component-specific styles needed here */
+/* Base (light) mode styles */
+.app-wrapper {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  color: #111827;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode styles */
+.app-wrapper.dark-mode {
+  background-color: #121212;
+  color: #f3f4f6;
+}
+
+/* Example styling for content */
+.content {
+  padding: 2rem;
+}
+
+/* Optional – you can customize link, header, etc. */
+.app-wrapper.dark-mode a {
+  color: #60a5fa;
+}

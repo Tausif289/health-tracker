@@ -1,4 +1,9 @@
 <div class="dashboard-container">
+    <div class="dashboard-title">
+  <h1>💪 Track, Fuel & Thrive!</h1>
+  <p>Monitor your meals, calories, water, and workouts – every step counts!</p>
+</div>
+
   <div class="main-grid">
     <div class="dashboard-card calorie-goal-card">
       <div class="card-header">
@@ -75,6 +80,68 @@
     </div>
 
 
+
+<div class="dashboard-card macros-card">
+  <div class="card-header">
+    <h2>Macronutrients</h2>
+  </div>
+
+  <div class="macros-content">
+    <div class="macro-item protein">
+      <div class="macro-icon">
+        <i class="fas fa-drumstick-bite"></i>
+      </div>
+      <div class="macro-details">
+        <p>Protein</p>
+        <h3>{{ protein() }} g</h3>
+      </div>
+    </div>
+
+    <div class="macro-item carbs">
+      <div class="macro-icon">
+        <i class="fas fa-bread-slice"></i>
+      </div>
+      <div class="macro-details">
+        <p>Carbs</p>
+        <h3>{{ carbs() }} g</h3>
+      </div>
+    </div>
+
+    <div class="macro-item fat">
+      <div class="macro-icon">
+        <i class="fas fa-cheese"></i>
+      </div>
+      <div class="macro-details">
+        <p>Fat</p>
+        <h3>{{ fat() }} g</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-card water-card">
+  <div class="card-header">
+    <h2>Today's Water Intake 💧</h2>
+    <button class="btn btn-sm btn-primary" (click)="healthDataService.addWater(250)">
+      + Add 250ml
+    </button>
+  </div>
+
+  <div class="water-progress">
+    <div class="water-info">
+      <h3>{{ waterIntake() }} ml</h3>
+      <p>Goal: 3000 ml</p>
+    </div>
+    <div class="progress-bar">
+      <div
+        class="progress-fill"
+        [style.width.%]="(waterIntake() / 3000) * 100"
+      ></div>
+    </div>
+  </div>
+</div>
+
+
     <div class="dashboard-card meals-card">
       <div class="card-header">
         <h2>Today's Meals</h2>
@@ -122,11 +189,11 @@
         <h2>Today's Activities</h2>
         <a routerLink="/add-activity" class="btn btn-sm btn-secondary">+ Add Activity</a>
       </div>
-        @for (activity of todaysActivities(); track activity.name) {
+        @for (activity of todaysActivities(); track activity.activityName) {
           <div class="item-row activity-row">
               <div class="activity-name">
                   <i class="fas fa-running"></i>
-                  <span>{{ activity.name }}</span>
+                  <span>{{ activity.activityName }}</span>
               </div>
               <span>{{ activity.caloriesBurned }} kcal</span>
           </div>

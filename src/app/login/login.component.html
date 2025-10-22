@@ -1,19 +1,64 @@
 <div class="login-container">
   <div class="login-form-container">
     <h2>{{ isLoginMode ? 'Login' : 'Sign Up' }}</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    <!-- LOGIN FORM -->
+    <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" formControlName="email" />
+        <label>Name</label>
+        <input type="text" formControlName="name" required />
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" formControlName="password" />
+        <label>Email</label>
+        <input type="email" formControlName="email" required />
       </div>
-      <button type="submit" class="btn btn-primary">{{ isLoginMode ? 'Login' : 'Sign Up' }}</button>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" required />
+      </div>
+
+      <div class="form-group">
+        <label>Current Weight (kg)</label>
+        <input type="number" formControlName="currentWeight" required />
+      </div>
+
+      <div class="form-group">
+        <label>Target Weight (kg)</label>
+        <input type="number" formControlName="targetWeight" required />
+      </div>
+
+      <div class="form-group">
+        <label>Age</label>
+        <input type="number" formControlName="age" required />
+      </div>
+
+      <div class="form-group">
+        <label>Height (cm)</label>
+        <input type="number" formControlName="height" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Login</button>
     </form>
-    <p>
-      {{ isLoginMode ? 'Don\'t have an account?' : 'Already have an account?' }}
+
+    <!-- SIGNUP FORM -->
+    <form *ngIf="!isLoginMode" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" formControlName="email" required />
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+
+    <!-- Toggle -->
+    <p class="toggle-text">
+      {{ isLoginMode ? "Don't have an account?" : 'Already have an account?' }}
       <a (click)="toggleMode()" class="toggle-link">
         {{ isLoginMode ? 'Sign up' : 'Login' }}
       </a>

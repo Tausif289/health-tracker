@@ -19,6 +19,43 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+.food-search-page-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: fadeIn 1s ease forwards;
+}
+
+.food-search-page-title h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #3b82f6;
+  background: linear-gradient(90deg, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: slideGradient 3s ease-in-out infinite;
+}
+
+.food-search-page-title p {
+  font-size: 1rem;
+  color: #bbbec3;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  animation: fadeIn 1.5s 0.5s ease forwards;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 
 .food-search-card, .selected-foods-card {
   background-color: var(--card-background);
@@ -96,49 +133,118 @@
 }
 
 /* Modal Styles */
+ /* ------------------ MODAL STYLES ------------------ */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
-  background: var(--card-background);
+  background: rgba(255, 255, 255, 0.95);
+  color: #1e293b;
   padding: 2.5rem;
   border-radius: 1rem;
   text-align: center;
-  max-width: 400px;
-  position: relative;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  border: 2px solid #3b82f6;
+  animation: scaleUp 0.3s ease;
 }
 
-.modal-content h2 { margin-top: 0; }
+.modal-content h2 {
+  margin-top: 0;
+  color: #3b82f6;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.quantity-input-group {
+  margin: 2rem 0;
+}
+
+.quantity-input-group label {
+  margin-right: 1rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.quantity-input {
+  width: 120px;
+  padding: 0.7rem;
+  text-align: center;
+  border: 2px solid #93c5fd;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.quantity-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.3);
+}
 
 .modal-actions {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 1rem;
-  margin-top: 2rem;
 }
 
-.btn-meal {
-  font-size: 1.1rem;
-  padding: 1rem;
-}
-.btn-meal i { margin-right: 0.75rem; }
-
-.btn-close {
-  position: absolute;
-  top: 1rem; right: 1rem;
-  background: transparent;
+/* Button Styles */
+.btn {
+  padding: 0.6rem 1.4rem;
   border: none;
-  font-size: 1.5rem;
-  color: #888;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.btn-primary {
+  background-color: #3b82f6;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+}
+
+.btn-primary:hover {
+  background-color: #2563eb;
+  transform: scale(1.05);
+}
+
+.btn-secondary {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.btn-secondary:hover {
+  background-color: #cbd5e1;
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 /* Button Styles */
 .btn {
   padding: 0.6rem 1.2rem;

@@ -1,27 +1,26 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common'; // ✅ Add this import
+import { DarkModeService } from '../services/dark-mode.services';
 
 @Component({
   selector: 'app-navigation-bar',
+  standalone: true,
   templateUrl: './navigation-bar.html',
   styleUrls: ['./navigation-bar.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterModule]
+  imports: [RouterModule, CommonModule] // ✅ Add CommonModule here
 })
 export class NavigationBarComponent {
   isMenuOpen = signal(false);
-  isDarkMode = signal(false);
+
+  constructor(public darkModeService: DarkModeService) {}
 
   toggleMenu() {
     this.isMenuOpen.set(!this.isMenuOpen());
   }
 
   toggleTheme() {
-    this.isDarkMode.set(!this.isDarkMode());
-    if (this.isDarkMode()) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    this.darkModeService.toggle();
   }
 }

@@ -1,32 +1,116 @@
 <div class="profile-container">
-  @if (user(); as user) {
+  <header class="profile-header">
+    <h1>Your Profile</h1>
+    <p>Manage your personal information and preferences</p>
+  </header>
+
+  @if (user) {
     <div class="profile-card">
-      <div class="profile-header">
-        <div class="profile-picture-container">
-          <img [src]="user.photoURL" alt="Profile Picture" class="profile-picture" />
+      <!-- 🔹 Top Section: Picture + Info -->
+      <div class="profile-top">
+        <div class="profile-pic-section">
+          <div class="profile-pic-wrapper">
+            <img
+            [src]="profileForm.value.photoURL || user?.photoURL || defaultImage"
+             alt="Profile Picture"
+             class="profile-pic"
+            />
+
+            <label class="upload-label" *ngIf="editMode">
+              <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+              <i class="fa fa-camera"></i>
+            </label>
+          </div>
         </div>
-        <h2>{{ user.displayName || 'No userName' }}</h2>
-        <p>{{ user.email }}</p>
+
+        <div class="profile-info">
+          <h2 class="name">{{ user.name || 'Guest User' }}</h2>
+          <p>{{ user.email }}</p>
+
+          <!-- Basic Stats -->
+          <div class="stats">
+            <p><strong>Age:</strong> {{ user.age }} yrs</p>
+            <p><strong>Height:</strong> {{ user.height }} cm</p>
+            <p><strong>Current Weight:</strong> {{ user.currentWeight }} kg</p>
+            <p><strong>Target Weight:</strong> {{ user.targetWeight }} kg</p>
+          </div>
+
+          <!-- Buttons -->
+          <div class="action-row">
+            <button *ngIf="!editMode" class="btn edit-btn" (click)="toggleEdit()">
+              Edit Profile
+            </button>
+            <button *ngIf="editMode" class="btn cancel-btn" (click)="cancelEdit()">
+              Cancel
+            </button>
+            <button class="btn logout-btn" (click)="signOut()">
+              <i class="fa fa-sign-out"></i> Logout
+            </button>
+          </div>
+        </div>
       </div>
 
-      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="profile-form">
+      <!-- 🔹 Edit Form -->
+      <form
+        *ngIf="editMode"
+        [formGroup]="profileForm"
+        (ngSubmit)="updateProfile()"
+        class="profile-form"
+        enctype="multipart/form-data"
+      >
         <div class="form-group">
-          <label for="displayName">Display Name</label>
-          <input type="text" id="displayName" formControlName="displayName" />
+          <label for="name">Full Name</label>
+          <input type="text" id="name" formControlName="name" />
         </div>
+
         <div class="form-group">
-          <label for="photoURL">Photo URL</label>
-          <input type="text" id="photoURL" formControlName="photoURL" />
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" readonly />
         </div>
+
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" formControlName="age" />
+        </div>
+
+        <div class="form-group">
+          <label for="height">Height (cm)</label>
+          <input type="number" id="height" formControlName="height" />
+        </div>
+
+        <div class="form-group">
+          <label for="currentWeight">Current Weight (kg)</label>
+          <input type="number" id="currentWeight" formControlName="currentWeight" />
+        </div>
+
+        <div class="form-group">
+          <label for="targetWeight">Target Weight (kg)</label>
+          <input type="number" id="targetWeight" formControlName="targetWeight" />
+        </div>
+
+        <!-- 🔹 Remove manual URL input and use upload instead -->
+        <div class="form-group">
+          <label>Profile Photo</label>
+          <div class="upload-preview">
+           <img
+            [src]="profileForm.value.photoURL || user?.photoURL || defaultImage"
+             alt="Profile Picture"
+             class="profile-picture"
+            />
+            <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+          </div>
+        </div>
+
         <div class="button-group">
-          <button type="submit" class="btn btn-primary">Update Profile</button>
-          <button type="button" (click)="signOut()" class="btn btn-danger">Sign Out</button>
+          <button type="submit" class="btn save-btn" [disabled]="profileForm.invalid">
+            Save Changes
+          </button>
         </div>
       </form>
     </div>
   } @else {
     <div class="loading-container">
-      <p>Loading...</p>
+      <p>Loading profile...</p>
     </div>
   }
 </div>

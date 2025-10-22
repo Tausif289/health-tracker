@@ -1,65 +1,180 @@
 <div class="goal-tracking-container">
-  <div class="card">
-    <div class="card-header">
-      <h2>Weight Goals</h2>
-      <p>Set your initial, current, and target weights.</p>
-    </div>
-    <div class="goal-inputs">
-      <div class="input-group">
-        <label for="initialWeight">Initial Weight (kg)</label>
-        <input id="initialWeight" type="number" [(ngModel)]="initialWeight">
-      </div>
-      <div class="input-group">
-        <label for="currentWeight">Current Weight (kg)</label>
-        <input id="currentWeight" type="number" [(ngModel)]="currentWeight">
-      </div>
-      <div class="input-group">
-        <label for="targetWeight">Target Weight (kg)</label>
-        <input id="targetWeight" type="number" [(ngModel)]="targetWeight">
-      </div>
-    </div>
-    <button class="btn btn-primary" (click)="saveGoals()">Save Goals</button>
+  <!-- 🔹 Title Section -->
+  <div class="goal-tracking-title">
+    <h1>🎯 Achieve Your Goals</h1>
+    <p>Monitor your progress, track weekly stats, and stay motivated!</p>
   </div>
 
-  <div class="card">
-    <div class="card-header">
-      <h2>Your Progress</h2>
-    </div>
-    <p class="progress-text">You are <strong>{{ progress().toFixed(2) }}%</strong> of the way to your goal!</p>
-    <div class="progress-bar-container">
-      <div class="progress-bar" [style.width.%]="progress()"></div>
-    </div>
-    <div class="average-loss">
-      <p>Average Weekly Loss: <strong>{{ averageWeeklyLoss() }} kg</strong></p>
-    </div>
-  </div>
+  <!-- 🔹 Goals Section -->
+  <div class="goals-grid" *ngIf="goals() && goals().length > 0; else noGoals">
+    <div
+      class="goal-card"
+      *ngFor="let goal of goals()"
+      [class.completed]="calculateProgress(goal) === 100"
+    >
+      <!-- Edit Mode -->
+      <div *ngIf="goal.editing; else viewGoal">
+        <div class="goal-card-edit">
+          <input type="text" [(ngModel)]="goal.name" placeholder="Goal Name" />
+          <select [(ngModel)]="goal.type">
+            <option value="Weight">Weight</option>
+            <option value="Calories">Calories</option>
+            <option value="Distance">Distance</option>
+            <option value="Duration">Duration</option>
+          </select>
 
-  <div class="card full-width-card">
-    <div class="card-header">
-      <h2>Weekly Weight Tracking</h2>
-    </div>
-    <div class="add-entry-form">
-      <input type="number" [(ngModel)]="newWeekWeight" placeholder="Enter this week's weight">
-      <button class="btn btn-secondary" (click)="addWeeklyWeight()">Add Entry</button>
-    </div>
+          <input type="number" [(ngModel)]="goal.initialValue" placeholder="Initial Value" />
+          <input type="number" [(ngModel)]="goal.currentValue" placeholder="Current Value" />
+          <input type="number" [(ngModel)]="goal.targetValue" placeholder="Target Value" />
+          <input type="text" [(ngModel)]="goal.unit" placeholder="Unit (e.g. kg, km)" />
 
-    @if (weeklyWeightLog().length > 0) {
-      <div class="weight-log-table">
-        <div class="table-header">
-          <div>Week</div>
-          <div>Weight (kg)</div>
+          <div class="edit-actions">
+            <button (click)="updateGoal(goal._id!, goal)">💾 Save</button>
+            <button (click)="goal.editing = false">✖ Cancel</button>
+          </div>
         </div>
-        <div class="table-body">
-          @for (entry of weeklyWeightLog(); track entry.week) {
-            <div class="table-row">
-              <div>{{ entry.week }}</div>
-              <div>{{ entry.weight }}</div>
+      </div>
+
+      <!-- View Mode -->
+      <ng-template #viewGoal>
+        <div class="goal-card-header">
+          <h3>{{ goal.name }}</h3>
+          <p class="goal-type">{{ goal.type }}</p>
+          <div *ngIf="calculateProgress(goal) === 100" class="goal-completed-badge">🏆</div>
+        </div>
+
+        <div class="goal-card-body">
+          <div class="goal-details">
+            <div class="goal-detail">
+              <span class="detail-label">Current</span>
+              <span class="detail-value">{{ goal.currentValue }} {{ goal.unit }}</span>
             </div>
-          }
+            <div class="goal-detail">
+              <span class="detail-label">Target</span>
+              <span class="detail-value">{{ goal.targetValue }} {{ goal.unit }}</span>
+            </div>
+          </div>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" [style.width.%]="calculateProgress(goal)"></div>
+          </div>
+
+          <p class="progress-text">{{ calculateProgress(goal) | number : '1.0-0' }}% Complete</p>
         </div>
+
+        <div class="goal-card-footer">
+          <button (click)="goal.editing = true">✏️ Edit</button>
+          <button (click)="removeGoal(goal._id!)">🗑 Remove</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <ng-template #noGoals>
+    <p class="empty-message">You have no goals yet. Add one to get started!</p>
+  </ng-template>
+
+  <!-- 🔹 Add Goal Section -->
+<div class="add-goal-form">
+  <form (ngSubmit)="addGoalFromForm()" class="goal-form">
+    <h2>Add new goal</h2>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Goal Name</label>
+        <input type="text" [(ngModel)]="goalForm.name" name="name" required />
       </div>
-    } @else {
-      <p class="empty-state">No weekly weight entries yet.</p>
-    }
+
+      <div class="form-group">
+        <label>Type</label>
+        <select [(ngModel)]="goalForm.type" name="type">
+          <option value="Weight">Weight</option>
+          <option value="Calories">Calories</option>
+          <option value="Distance">Distance</option>
+          <option value="Duration">Duration</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Initial Value</label>
+        <input type="number" [(ngModel)]="goalForm.initialValue" name="initialValue" required />
+      </div>
+
+      <div class="form-group">
+        <label>Current Value</label>
+        <input type="number" [(ngModel)]="goalForm.currentValue" name="currentValue" required />
+      </div>
+
+      <div class="form-group">
+        <label>Target Value</label>
+        <input type="number" [(ngModel)]="goalForm.targetValue" name="targetValue" required />
+      </div>
+
+      <div class="form-group">
+        <label>Unit</label>
+        <input type="text" [(ngModel)]="goalForm.unit" name="unit" />
+      </div>
+    </div>
+
+    <button type="submit">Add Goal</button>
+  </form>
+</div>
+
+
+  <!-- 🔹 Weekly Weight Tracking -->
+  <div class="weekly-weight-section">
+    <h2>📅 Weekly Weight Tracking</h2>
+
+    <div
+      class="weight-table-container"
+      *ngIf="weeklyWeights() && weeklyWeights().length > 0; else noWeights"
+    >
+      <table class="weight-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Weight (kg)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of weeklyWeights()">
+            <td *ngIf="!entry.editing">{{ entry.date | date : 'mediumDate' }}</td>
+            <td *ngIf="entry.editing"><input type="date" [(ngModel)]="entry.date" /></td>
+
+            <td *ngIf="!entry.editing">{{ entry.weight }}</td>
+            <td *ngIf="entry.editing"><input type="number" [(ngModel)]="entry.weight" /></td>
+
+            <td>
+              <button *ngIf="!entry.editing" (click)="entry.editing = true">✏️ Edit</button>
+              <button *ngIf="entry.editing" (click)="updateWeightEntry(entry._id!, entry)">
+                💾 Save
+              </button>
+              <button *ngIf="entry.editing" (click)="entry.editing = false">✖ Cancel</button>
+              <button (click)="removeWeightEntry(entry._id!)">🗑 Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noWeights>
+      <p class="empty-message">No weight entries yet.</p>
+    </ng-template>
+
+    <div class="add-weight-entry-form">
+      <h3>Add New Weight Entry</h3>
+      <input #dateInput type="date" />
+      <input #weightInput type="number" placeholder="Weight (kg)" />
+      <button
+        (click)="
+          addWeightEntry({ date: dateInput.value, weight: +weightInput.value });
+          dateInput.value = '';
+          weightInput.value = ''
+        "
+      >
+        ➕ Add Entry
+      </button>
+    </div>
   </div>
 </div>

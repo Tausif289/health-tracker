@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GoalTracking } from './goal-tracking';
+import { GoalTrackingComponent } from './goal-tracking';
 
-describe('GoalTracking', () => {
-  let component: GoalTracking;
-  let fixture: ComponentFixture<GoalTracking>;
+describe('GoalTrackingComponent', () => {
+  let component: GoalTrackingComponent;
+  let fixture: ComponentFixture<GoalTrackingComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GoalTracking]
+      imports: [GoalTrackingComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GoalTracking);
+    fixture = TestBed.createComponent(GoalTrackingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

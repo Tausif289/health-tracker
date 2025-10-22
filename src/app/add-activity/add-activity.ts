@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { HealthDataService, ActivityItem } from '../health-data.service';
 
 interface ActivityOption {
-  name: string;
+  activityName: string;
   caloriesPerMinute: number;
 }
 
@@ -27,26 +27,26 @@ export class AddActivityComponent {
   public activityToEdit = signal<ActivityOption | null>(null);
 
   public allActivities: ActivityOption[] = [
-    { name: 'Running', caloriesPerMinute: 12 },
-    { name: 'Walking', caloriesPerMinute: 5 },
-    { name: 'Cycling', caloriesPerMinute: 10 },
-    { name: 'Swimming', caloriesPerMinute: 8 },
-    { name: 'Yoga', caloriesPerMinute: 4 },
-    { name: 'Weightlifting', caloriesPerMinute: 6 },
-    { name: 'Jumping Jacks', caloriesPerMinute: 15 },
-    { name: 'Dancing', caloriesPerMinute: 7 },
-    { name: 'Hiking', caloriesPerMinute: 7 },
-    { name: 'HIIT', caloriesPerMinute: 18 },
-    { name: 'Pilates', caloriesPerMinute: 5 },
-    { name: 'Boxing', caloriesPerMinute: 13 },
+    { activityName: 'Running', caloriesPerMinute: 12 },
+    { activityName: 'Walking', caloriesPerMinute: 5 },
+    { activityName: 'Cycling', caloriesPerMinute: 10 },
+    { activityName: 'Swimming', caloriesPerMinute: 8 },
+    { activityName: 'Yoga', caloriesPerMinute: 4 },
+    { activityName: 'Weightlifting', caloriesPerMinute: 6 },
+    { activityName: 'Jumping Jacks', caloriesPerMinute: 15 },
+    { activityName: 'Dancing', caloriesPerMinute: 7 },
+    { activityName: 'Hiking', caloriesPerMinute: 7 },
+    { activityName: 'HIIT', caloriesPerMinute: 18 },
+    { activityName: 'Pilates', caloriesPerMinute: 5 },
+    { activityName: 'Boxing', caloriesPerMinute: 13 },
   ];
 
   public filteredActivities = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    const selectedNames = this.selectedActivities().map(a => a.name);
+    const selectedNames = this.selectedActivities().map(a => a.activityName);
     return this.allActivities.filter(activity => 
-      !selectedNames.includes(activity.name) &&
-      (activity.name.toLowerCase().includes(term) || !term)
+      !selectedNames.includes(activity.activityName) &&
+      (activity.activityName.toLowerCase().includes(term) || !term)
     );
   });
 
@@ -65,7 +65,7 @@ export class AddActivityComponent {
     if (!activity) return;
 
     const caloriesBurned = Math.round(activity.caloriesPerMinute * this.duration());
-    const newActivity: ActivityItem = { name: activity.name, caloriesBurned };
+    const newActivity: ActivityItem = { activityName: activity.activityName, caloriesBurned };
 
     this.selectedActivities.update(activities => [...activities, newActivity]);
     this.closeModal();
@@ -73,13 +73,13 @@ export class AddActivityComponent {
 
   public removeActivity(activityName: string): void {
     this.selectedActivities.update(activities => 
-      activities.filter(a => a.name !== activityName)
+      activities.filter(a => a.activityName !== activityName)
     );
   }
 
-  public addAllToDashboard(): void {
+  public async addAllToDashboard(): Promise<void> {
     if (this.selectedActivities().length > 0) {
-      this.healthDataService.addMultipleActivities(this.selectedActivities());
+      await this.healthDataService.addMultipleActivities(this.selectedActivities()); // backend POST
       this.selectedActivities.set([]);
       this.router.navigate(['/dashboard']);
     }

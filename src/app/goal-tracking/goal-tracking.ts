@@ -1,67 +1,151 @@
-
-import { ChangeDetectionStrategy, Component, signal, computed } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal ,ViewEncapsulation} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface WeeklyWeightEntry {
-  week: number;
-  weight: number;
-}
-
+import { GoalTrackingService,Goal, WeightEntry } from '../services/goal-tracking,service';
 @Component({
   selector: 'app-goal-tracking',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './goal-tracking.html',
   styleUrls: ['./goal-tracking.css'],
+  encapsulation: ViewEncapsulation.None ,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GoalTrackingComponent {
-  public initialWeight = signal(80);
-  public currentWeight = signal(75);
-  public targetWeight = signal(70);
-  public newWeekWeight = signal(0);
+export class GoalTrackingComponent implements OnInit {
+  private defaultGoals: Goal[] = [
+     { name: 'Lose 5kg', type: 'Weight', initialValue: 70, currentValue: 70, targetValue: 65, unit: 'kg', editing: false },
+     { name: 'Run 10km', type: 'Distance', initialValue: 0, currentValue: 0, targetValue: 10, unit: 'km', editing: false },
+     { name: 'Burn 2000 cal', type: 'Calories', initialValue: 0, currentValue: 0, targetValue: 2000, unit: 'cal', editing: false }
+  ];
+  public goals = signal<Goal[]>([]);
+  public weeklyWeights = signal<WeightEntry[]>([]);
+  public userId: string | null = null;
 
-  public weeklyWeightLog = signal<WeeklyWeightEntry[]>([
-    { week: 1, weight: 79 },
-    { week: 2, weight: 78 },
-    { week: 3, weight: 76 },
-    { week: 4, weight: 75 },
-  ]);
+  public goalForm = {
+    name: '',
+    type: 'Weight' as 'Weight' | 'Calories' | 'Distance' | 'Duration',
+    initialValue: 0,
+    currentValue: 0,
+    targetValue: 0,
+    unit: ''
+  };
 
-  public progress = computed(() => {
-    const initial = this.initialWeight();
-    const current = this.currentWeight();
-    const target = this.targetWeight();
-    if (initial === target) return 100;
-    const totalToLose = initial - target;
-    const lost = initial - current;
-    return Math.max(0, Math.min(100, (lost / totalToLose) * 100));
-  });
+  constructor(private goalService: GoalTrackingService) {}
 
-  public averageWeeklyLoss = computed(() => {
-    const log = this.weeklyWeightLog();
-    if (log.length < 2) return 0;
-    const firstWeek = log[0];
-    const lastWeek = log[log.length - 1];
-    const weightLoss = firstWeek.weight - lastWeek.weight;
-    const weeks = lastWeek.week - firstWeek.week;
-    return weeks > 0 ? parseFloat((weightLoss / weeks).toFixed(2)) : 0;
-  });
+  ngOnInit() {
+  // ✅ Get user data from localStorage
+  const userData = localStorage.getItem('user');
 
-  public addWeeklyWeight(): void {
-    if (this.newWeekWeight() > 0) {
-      const newWeekNumber = (this.weeklyWeightLog()[this.weeklyWeightLog().length - 1]?.week || 0) + 1;
-      this.weeklyWeightLog.update(log => [...log, { week: newWeekNumber, weight: this.newWeekWeight() }]);
-      this.currentWeight.set(this.newWeekWeight());
-      this.newWeekWeight.set(0);
-    }
+  if (userData) {
+    const parsedUser = JSON.parse(userData);
+    this.userId = parsedUser._id; // ✅ Extract the actual user ID
   }
 
-  public saveGoals(): void {
-    // In a real application, you would save this data to a backend service.
-    console.log('Goals saved!');
-    console.log('Initial Weight:', this.initialWeight());
-    console.log('Current Weight:', this.currentWeight());
-    console.log('Target Weight:', this.targetWeight());
+  if (!this.userId) {
+    console.error('User ID not found in localStorage');
+    return;
+  }
+
+  this.loadData();
+}
+  loadData() {
+  if (!this.userId) return;
+
+  this.goalService.getGoalTracking(this.userId).subscribe({
+    next: (data) => {
+      if (!data.goals || data.goals.length === 0) {
+        // ✅ No goals found for this user, add default goals
+        this.defaultGoals.forEach(goal => this.addGoal(goal));
+      } else {
+        // ✅ User already has goals
+        this.goals.set(data.goals);
+      }
+
+      // Always set weekly weights
+      this.weeklyWeights.set(data.weeklyWeights || []);
+    },
+    error: (err) => console.error('Error loading data:', err),
+  });
+}
+
+
+  addGoalFromForm() {
+    if (!this.userId) return;
+
+    const newGoal: Goal = { ...this.goalForm };
+    this.addGoal(newGoal);
+
+    // Reset form
+    this.goalForm = {
+      name: '',
+      type: 'Weight',
+      initialValue: 0,
+      currentValue: 0,
+      targetValue: 0,
+      unit: ''
+    };
+  }
+
+  addGoal(goal: Goal) {
+    if (!this.userId) return;
+
+    this.goalService.addGoal(this.userId, goal).subscribe({
+      next: () => this.loadData(),
+      error: (err) => console.error(err),
+    });
+  }
+
+  updateGoal(goalId: string, updatedGoal: Goal) {
+    if (!this.userId) return;
+
+    this.goalService.updateGoal(this.userId, goalId, updatedGoal).subscribe({
+      next: () => this.loadData(),
+      error: (err) => console.error(err),
+    });
+  }
+
+  removeGoal(goalId: string) {
+    if (!this.userId) return;
+
+    this.goalService.removeGoal(this.userId, goalId).subscribe({
+      next: () => this.loadData(),
+      error: (err) => console.error(err),
+    });
+  }
+
+  addWeightEntry(entry: WeightEntry) {
+    if (!this.userId) return;
+
+    this.goalService.addWeight(this.userId, entry).subscribe({
+      next: () => this.loadData(),
+      error: (err) => console.error(err),
+    });
+  }
+
+  updateWeightEntry(entryId: string, updatedEntry: WeightEntry) {
+    if (!this.userId) return;
+
+    this.goalService.updateWeight(this.userId, entryId, updatedEntry).subscribe({
+      next: () => this.loadData(),
+      error: (err) => console.error(err),
+    });
+  }
+
+  removeWeightEntry(entryId: string) {
+    if (!this.userId) return;
+
+    this.goalService.removeWeight(this.userId, entryId).subscribe({
+      next: () => this.loadData(),
+      error: (err) => console.error(err),
+    });
+  }
+
+  calculateProgress(goal: Goal): number {
+    const { initialValue, currentValue, targetValue } = goal;
+    const decreasing = targetValue < initialValue;
+    const progress = decreasing
+      ? ((initialValue - currentValue) / (initialValue - targetValue)) * 100
+      : ((currentValue - initialValue) / (targetValue - initialValue)) * 100;
+    return Math.max(0, Math.min(100, progress));
   }
 }

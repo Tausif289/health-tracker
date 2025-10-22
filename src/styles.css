@@ -41,3 +41,31 @@ body.light-mode {
   margin: 0 auto;
   padding: 0 1rem;
 }
+
+styles.css
+body.dark-mode {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+body.dark-mode .goal-tracking-container {
+  background-color: #374151;
+  color: #f9fafb;
+}
+
+body.dark-mode .goal-card {
+  background-color: #4b5563;
+  color: #f9fafb;
+}
+
+body.dark-mode input,
+body.dark-mode select {
+  background-color: #6b7280;
+  color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+body.dark-mode button {
+  background: #3b82f6;
+  color: #fff;
+} 

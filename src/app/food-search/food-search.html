@@ -1,4 +1,7 @@
-<div class="food-search-container">
+<div class="food-search-page-title">
+  <h1>🍎 Add Foods to Your Daily Log</h1>
+  <p>Search, select, and track your meals to stay on top of your nutrition goals!</p>
+</div><div class="food-search-container">
 
   <!-- Search and Results -->
   <div class="food-search-card">
@@ -10,36 +13,32 @@
     <div class="search-controls">
       <input
         type="text"
-        [ngModel]="searchTerm()"
-        (ngModelChange)="searchTerm.set($event)"
+        [(ngModel)]="searchTerm"
         placeholder="Search for a food... (e.g., apple, chicken)"
         class="search-input"
       />
     </div>
 
     <div class="search-results-list">
-        @if (!searchTerm()) {
-            <p class="empty-state">Start typing to find food items.</p>
-        } @else if (filteredFoods().length === 0) {
-            <p class="empty-state">No more food found matching your search.</p>
-        } @else {
-            @for (food of filteredFoods(); track food.name) {
-                <div class="search-result-item">
-                    <div class="food-info">
-                        <h3>{{ food.name }}</h3>
-                        <div class="food-macros">
-                            <span>{{ food.calories }} kcal</span>
-                            <span>P: {{ food.protein }}g</span>
-                            <span>C: {{ food.carbs }}g</span>
-                            <span>F: {{ food.fat }}g</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-icon" (click)="addFood(food)" aria-label="Add {{food.name}}">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-            }
-        }
+      <div *ngIf="filteredFoods().length === 0" class="empty-state">
+        No foods found matching your search.
+      </div>
+
+      <div *ngFor="let food of filteredFoods()" class="search-result-item">
+        <div class="food-info">
+          <h3>{{ food.name }}</h3>
+          <div class="food-macros">
+            <span>{{ food.calories }} kcal</span>
+            <span>P: {{ food.protein }}g</span>
+            <span>C: {{ food.carbs }}g</span>
+            <span>F: {{ food.fat }}g</span>
+          </div>
+        </div>
+        <button class="btn btn-icon" (click)="addFood(food)" aria-label="Add {{ food.name }}">
+  <i class="fas fa-plus"></i>
+</button>
+
+      </div>
     </div>
   </div>
 
@@ -47,56 +46,87 @@
   <div class="selected-foods-card">
     <div class="card-header">
       <h2>Selected Foods ({{ selectedFoods().length }})</h2>
-      <button class="btn btn-primary" (click)="showMealSelection()" [disabled]="selectedFoods().length === 0">
-        Add to Dashboard
-      </button>
+     <button
+  class="btn btn-primary"
+  (click)="showMealSelection()"
+  [disabled]="selectedFoods().length === 0"
+>
+  Add to Dashboard
+</button>
+
     </div>
 
-    @if (selectedFoods().length > 0) {
-        <div class="total-calories">
-            <strong>Total: {{ totalSelectedCalories() }} kcal</strong>
-        </div>
-    }
+    <div *ngIf="selectedFoods().length > 0" class="total-calories">
+      <strong>Total: {{ totalSelectedCalories() }} kcal</strong>
+    </div>
 
     <div class="selected-foods-list">
-      @for (food of selectedFoods(); track food.name) {
-        <div class="selected-food-item">
-          <div class="food-info">
-            <h3>{{ food.name }}</h3>
-            <p>{{ food.calories }} kcal</p>
-          </div>
-          <button class="btn btn-icon btn-danger" (click)="removeFood(food)" aria-label="Remove {{food.name}}">
-            <i class="fas fa-times"></i>
-          </button>
+      <div *ngFor="let food of selectedFoods()" class="selected-food-item">
+        <div class="food-info">
+          <h3>{{ food.name }}</h3>
+          <p>{{ food.calories }} kcal</p>
         </div>
-      } @empty {
-          <p class="empty-state">No foods selected yet. Search above to get started.</p>
-      }
+        <button
+          class="btn btn-icon btn-danger"
+          (click)="removeFood(food)"
+          aria-label="Remove {{ food.name }}"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div *ngIf="selectedFoods.length === 0" class="empty-state">
+        No foods selected yet. Search above to get started.
+      </div>
     </div>
   </div>
-
 </div>
 
 <!-- Meal Selection Modal -->
-@if (isModalVisible()) {
-  <div class="modal-overlay" (click)="closeModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>Assign to Meal</h2>
-      <p>Where should these {{ selectedFoods().length }} items be added?</p>
-      <div class="modal-actions">
-        <button class="btn btn-meal" (click)="assignToMeal('breakfast')">
-          <i class="fas fa-sun"></i> Breakfast
-        </button>
-        <button class="btn btn-meal" (click)="assignToMeal('lunch')">
-          <i class="fas fa-cloud-sun"></i> Lunch
-        </button>
-        <button class="btn btn-meal" (click)="assignToMeal('dinner')">
-          <i class="fas fa-moon"></i> Dinner
-        </button>
-      </div>
-      <button class="btn-close" (click)="closeModal()" aria-label="Close modal">
-        <i class="fas fa-times"></i>
+<!-- Meal Selection Modal -->
+<div *ngIf="isModalVisible()" class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Assign to Meal</h2>
+    <p>Where should these {{ selectedFoods().length }} items be added?</p>
+    <div class="modal-actions">
+      <button class="btn btn-meal" (click)="assignToMeal('breakfast')">
+        <i class="fas fa-sun"></i> Breakfast
+      </button>
+      <button class="btn btn-meal" (click)="assignToMeal('lunch')">
+        <i class="fas fa-cloud-sun"></i> Lunch
+      </button>
+      <button class="btn btn-meal" (click)="assignToMeal('dinner')">
+        <i class="fas fa-moon"></i> Dinner
       </button>
     </div>
+    <button class="btn-close" (click)="closeModal()" aria-label="Close modal">
+      <i class="fas fa-times"></i>
+    </button>
   </div>
-}
+</div>
+
+
+<!-- Quantity Modal -->
+<!-- Quantity Modal -->
+<div *ngIf="isQuantityModalVisible()" class="modal-overlay" (click)="closeQuantityModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Set Quantity for {{ selectedFoodForQuantity()?.name }}</h2>
+
+    <div class="quantity-input-group">
+      <label for="quantity">Quantity (grams or units):</label>
+      <input
+        type="number"
+        id="quantity"
+        [ngModel]="quantity()"
+        (ngModelChange)="quantity.set($event)"
+        min="1"
+        class="quantity-input"
+      />
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-primary" (click)="confirmQuantity()">Add Food</button>
+      <button class="btn btn-secondary" (click)="closeQuantityModal()">Cancel</button>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,8 @@
+<div class="activity-page-title">
+  <h1>🏃‍♂️ Log Your Activities</h1>
+  <p>Track your workouts and monitor calories burned every day!</p>
+</div>
+
 <div class="add-activity-container">
 
   <!-- Search and Results -->
@@ -18,13 +23,13 @@
     </div>
 
     <div class="activity-list">
-      @for (activity of filteredActivities(); track activity.name) {
+      @for (activity of filteredActivities(); track activity.activityName) {
         <div class="activity-item">
           <div class="activity-info">
-            <h3>{{ activity.name }}</h3>
+            <h3>{{ activity.activityName }}</h3>
             <p>{{ activity.caloriesPerMinute }} kcal per minute</p>
           </div>
-          <button class="btn btn-icon" (click)="openDurationModal(activity)" aria-label="Add {{activity.name}}">
+          <button class="btn btn-icon" (click)="openDurationModal(activity)" aria-label="Add {{activity.activityName}}">
             <i class="fas fa-plus"></i>
           </button>
         </div>
@@ -50,13 +55,13 @@
     }
 
     <div class="selected-activities-list">
-      @for (activity of selectedActivities(); track activity.name) {
+      @for (activity of selectedActivities(); track activity.activityName) {
         <div class="selected-activity-item">
           <div class="activity-info">
-            <h3>{{ activity.name }}</h3>
+            <h3>{{ activity.activityName }}</h3>
             <p>{{ activity.caloriesBurned }} kcal</p>
           </div>
-          <button class="btn btn-icon btn-danger" (click)="removeActivity(activity.name)" aria-label="Remove {{activity.name}}">
+          <button class="btn btn-icon btn-danger" (click)="removeActivity(activity.activityName)" aria-label="Remove {{activity.activityName}}">
             <i class="fas fa-times"></i>
           </button>
         </div>
@@ -72,7 +77,7 @@
 @if (isModalVisible()) {
   <div class="modal-overlay" (click)="closeModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <h2>Set Duration for {{ activityToEdit()?.name }}</h2>
+      <h2>Set Duration for {{ activityToEdit()?.activityName }}</h2>
       <div class="duration-input-group">
         <label for="duration">Duration (minutes):</label>
         <input

@@ -1,4 +1,11 @@
-<app-header></app-header>
-<main class="container">
-  <router-outlet></router-outlet>
-</main>
+<!-- Wrapper div that toggles dark mode class -->
+<div class="app-wrapper" [class.dark-mode]="darkModeService.isDarkMode()">
+  <app-navigation-bar></app-navigation-bar>
+
+  <main class="content">
+    <h1>tsudfnrfnuvnuvntvtn</h1>
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-footer></app-footer>
+</div>
