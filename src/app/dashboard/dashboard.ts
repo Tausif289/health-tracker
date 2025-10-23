@@ -25,8 +25,10 @@ export class DashboardComponent implements OnInit {
   public fat = this.healthDataService.fat;
   public waterIntake = this.healthDataService.waterIntake; // 💧
 
-  public remainingCalories = computed(() => this.calorieGoal() - this.intakeCalories() + this.burnedCalories());
-
+  public remainingCalories = computed(() => this.calorieGoal() - this.intakeCalories());
+  public withoutdecimalremainingCalories = computed(() => 
+  Math.floor(this.calorieGoal() - this.intakeCalories())
+);
   public get progress(): number {
     const progress = (this.intakeCalories() / this.calorieGoal()) * 100;
     console.log("intake calories",this.intakeCalories())

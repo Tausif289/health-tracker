@@ -6,7 +6,26 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
+input {
+  width: 90%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #3b82f6;
+  border-radius: 0.5rem;
+  background-color: var(--background-color);
 
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2); /* 🌟 subtle blue shadow */
+  transition: all 0.3s ease;
+}
+
+/* 🔹 When user clicks or types (focus state) */
+input:focus {
+  outline: none;
+  border-color: #1d4ed8; /* darker blue border */
+  box-shadow: 0 0 8px rgba(29, 78, 216, 0.5), 0 2px 8px rgba(0, 0, 0, 0.15);
+  background-color: var(--background-color);
+}
 /* Header */
 /* ------------------ PROFILE PAGE TITLE ------------------ */
 .profile-header {
@@ -51,7 +70,7 @@
 .profile-card {
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.30);
   margin-top: 1.5rem;
 }
 
@@ -88,7 +107,6 @@
   bottom: 0;
   right: 0;
   background-color: #3b82f6;
-  color: #fff;
   border-radius: 50%;
   padding: 6px;
   cursor: pointer;
@@ -99,6 +117,7 @@
 
 .upload-label input[type="file"] {
   display: none;
+  color: #777;
 }
 
 .upload-label i.fa-camera {
@@ -193,7 +212,6 @@
 .form-group input {
   padding: 0.5rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
   font-size: 1rem;
 }
 
@@ -214,7 +232,7 @@ button:disabled {
   text-align: center;
   margin-top: 2rem;
   font-size: 1rem;
-  color: #555;
+  
 }
 
 /* Responsive */
@@ -236,3 +254,69 @@ button:disabled {
     justify-content: center;
   }
 }
+
+.upload-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-picture {
+  width: 120px; /* ✅ Adjust size as needed (80–150px looks good) */
+  height: 120px;
+  border-radius: 50%; /* ✅ Makes it circular */
+  object-fit: cover; /* ✅ Keeps image proportions */
+  border: 2px solid #ccc; /* Optional nice border */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.upload-preview input[type="file"] {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+
+/* 🔹 Input & Label Text Styling */
+.form-group label {
+  color: #518dec;;
+   /* dark slate text for light mode */
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="file"] {
+  color: #3b82f6;/* input text color */
+  /* subtle gray background */
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  transition: all 0.3s ease;
+}
+
+input::placeholder {
+  color: #3b82f6; /* soft gray placeholder */
+}
+
+input:focus {
+  border-color: #3b82f6; /* blue border */
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
+  background-color: #fff;
+  color: #111827;
+  outline: none;
+}
+
+/* 🌙 Optional Dark Mode Support */
+body.dark-mode input {
+  background-color: #1f2937;
+  color: #f9fafb;
+  border-color: #374151;
+}
+
+body.dark-mode .form-group label {
+  color: #e5e7eb;
+}
+

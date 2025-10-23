@@ -48,81 +48,90 @@ export class ReportComponent {
   }
 
   loadReportData(userId: string) {
-    this.reportService.getUserReport(userId).subscribe({
-      next: (data) => {
-        // 🥗 Calories Chart
-        this.calorieChartData = {
-          labels: data.calorieLogs.map((c: any) =>
-            new Date(c.date).toLocaleDateString()
-          ),
-          datasets: [
-            {
-              data: data.calorieLogs.map((c: any) => c.intakeCalories),
-              label: 'Calories Intake',
-              backgroundColor: 'rgba(110, 142, 251, 0.8)',
-            },
-            {
-              data: data.calorieLogs.map((c: any) => c.burnedCalories),
-              label: 'Calories Burned',
-              backgroundColor: 'rgba(167, 119, 227, 0.8)',
-            },
-          ],
-        };
+  this.reportService.getUserReport(userId).subscribe({
+    next: (data) => {
+      // 🥗 Calories Chart
+      this.calorieChartData = {
+        labels: data.calorieLogs.map((c: any) =>
+          new Date(c.date).toLocaleDateString()
+        ),
+        datasets: [
+          {
+            data: data.calorieLogs.map((c: any) => c.intakeCalories),
+            label: 'Calories Intake',
+            backgroundColor: 'rgba(110, 142, 251, 0.8)',
+          },
+          {
+            data: data.calorieLogs.map((c: any) => c.burnedCalories),
+            label: 'Calories Burned',
+            backgroundColor: 'rgba(167, 119, 227, 0.8)',
+          },
+        ],
+      };
 
-        // ⚖️ Weight Chart
-        this.weightChartData = {
-          labels: data.weightEntries.map((w: any) =>
-            new Date(w.date).toLocaleDateString()
-          ),
-          datasets: [
-            {
-              data: data.weightEntries.map((w: any) => w.weight),
-              label: 'Weight (kg)',
-              fill: true,
-              backgroundColor: 'rgba(110, 142, 251, 0.2)',
-              borderColor: 'rgba(110, 142, 251, 1)',
-            },
-          ],
-        };
+      // ⚖️ Weight Chart
+      this.weightChartData = {
+        labels: data.weightEntries.map((w: any) =>
+          new Date(w.date).toLocaleDateString()
+        ),
+        datasets: [
+          {
+            data: data.weightEntries.map((w: any) => w.weight),
+            label: 'Weight (kg)',
+            fill: true,
+            backgroundColor: 'rgba(110, 142, 251, 0.2)',
+            borderColor: 'rgba(110, 142, 251, 1)',
+          },
+        ],
+      };
 
-        // 🏃 Activity Chart
-        this.activityChartData = {
-          labels: data.activities.map((a: any) => a.activityName),
-          datasets: [
-            {
-              data: data.activities.map((a: any) => a.duration),
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.8)',
-                'rgba(54, 162, 235, 0.8)',
-                'rgba(255, 206, 86, 0.8)',
-                'rgba(75, 192, 192, 0.8)',
-              ],
-            },
-          ],
-        };
+      // 🏃 Activity Chart — 🔹 Only Top 8 by Duration
+      const sortedActivities = [...data.activities]
+        .sort((a, b) => b.duration - a.duration)
+        .slice(0, 8);
 
-        // 🍎 Nutrition Chart
-        this.nutritionChartData = {
-          labels: ['Protein', 'Carbs', 'Fat'],
-          datasets: [
-            {
-              data: [
-                data.nutritionSummary.protein,
-                data.nutritionSummary.carbs,
-                data.nutritionSummary.fat,
-              ],
-              backgroundColor: [
-                'rgba(153, 102, 255, 0.8)',
-                'rgba(255, 159, 64, 0.8)',
-                'rgba(255, 99, 132, 0.8)',
-              ],
-            },
-          ],
-        };
-      },
-      error: (err) => {
-        console.error('Error loading report:', err);
-      },
-    });
-  }
+      this.activityChartData = {
+        labels: sortedActivities.map((a: any) => a.activityName),
+        datasets: [
+          {
+            data: sortedActivities.map((a: any) => a.duration),
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.8)',
+              'rgba(54, 162, 235, 0.8)',
+              'rgba(255, 206, 86, 0.8)',
+              'rgba(75, 192, 192, 0.8)',
+              'rgba(153, 102, 255, 0.8)',
+              'rgba(255, 159, 64, 0.8)',
+              'rgba(255, 99, 71, 0.8)',
+              'rgba(0, 206, 209, 0.8)',
+            ],
+          },
+        ],
+      };
+
+      // 🍎 Nutrition Chart
+      this.nutritionChartData = {
+        labels: ['Protein', 'Carbs', 'Fat'],
+        datasets: [
+          {
+            data: [
+              data.nutritionSummary.protein,
+              data.nutritionSummary.carbs,
+              data.nutritionSummary.fat,
+            ],
+            backgroundColor: [
+              'rgba(153, 102, 255, 0.8)',
+              'rgba(255, 159, 64, 0.8)',
+              'rgba(255, 99, 132, 0.8)',
+            ],
+          },
+        ],
+      };
+    },
+    error: (err) => {
+      console.error('Error loading report:', err);
+    },
+  });
+}
+
 }

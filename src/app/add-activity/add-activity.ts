@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HealthDataService, ActivityItem } from '../health-data.service';
+import { activityData } from '../activitydata';
 
-interface ActivityOption {
+export interface ActivityOption {
   activityName: string;
   caloriesPerMinute: number;
 }
@@ -26,20 +27,7 @@ export class AddActivityComponent {
   public isModalVisible = signal(false);
   public activityToEdit = signal<ActivityOption | null>(null);
 
-  public allActivities: ActivityOption[] = [
-    { activityName: 'Running', caloriesPerMinute: 12 },
-    { activityName: 'Walking', caloriesPerMinute: 5 },
-    { activityName: 'Cycling', caloriesPerMinute: 10 },
-    { activityName: 'Swimming', caloriesPerMinute: 8 },
-    { activityName: 'Yoga', caloriesPerMinute: 4 },
-    { activityName: 'Weightlifting', caloriesPerMinute: 6 },
-    { activityName: 'Jumping Jacks', caloriesPerMinute: 15 },
-    { activityName: 'Dancing', caloriesPerMinute: 7 },
-    { activityName: 'Hiking', caloriesPerMinute: 7 },
-    { activityName: 'HIIT', caloriesPerMinute: 18 },
-    { activityName: 'Pilates', caloriesPerMinute: 5 },
-    { activityName: 'Boxing', caloriesPerMinute: 13 },
-  ];
+  public allActivities: ActivityOption[] = activityData
 
   public filteredActivities = computed(() => {
     const term = this.searchTerm().toLowerCase();
@@ -60,16 +48,23 @@ export class AddActivityComponent {
     this.isModalVisible.set(true);
   }
 
-  public addActivityToList(): void {
-    const activity = this.activityToEdit();
-    if (!activity) return;
+public addActivityToList(): void {
+  const activity = this.activityToEdit();
+  if (!activity) return;
 
-    const caloriesBurned = Math.round(activity.caloriesPerMinute * this.duration());
-    const newActivity: ActivityItem = { activityName: activity.activityName, caloriesBurned };
+  const duration = this.duration(); // get the duration from your input
+  const caloriesBurned = Math.round(activity.caloriesPerMinute * duration);
 
-    this.selectedActivities.update(activities => [...activities, newActivity]);
-    this.closeModal();
-  }
+  const newActivity: ActivityItem = {
+    activityName: activity.activityName,
+    caloriesBurned,
+    duration, // <-- add duration here
+  };
+
+  this.selectedActivities.update(activities => [...activities, newActivity]);
+  this.closeModal();
+}
+
 
   public removeActivity(activityName: string): void {
     this.selectedActivities.update(activities => 

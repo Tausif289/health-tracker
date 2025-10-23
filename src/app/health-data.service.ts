@@ -15,6 +15,7 @@ export interface FoodItem {
 export interface ActivityItem {
   activityName: string;
   caloriesBurned: number;
+   duration: number; // ✅ add this line
 }
 
 @Injectable({ providedIn: 'root' })

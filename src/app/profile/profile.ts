@@ -112,7 +112,6 @@ export class ProfileComponent2 {
           localStorage.setItem('user', JSON.stringify(data.user));
           this.editMode = false;
           console.log('✅ Profile updated:', data.user);
-          alert('Profile updated successfully!');
         } else {
           alert('Update failed: ' + (data.message || 'Unknown error'));
         }

@@ -9,10 +9,41 @@
 .login-form-container {
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.30);
   width: 100%;
   max-width: 400px;
 }
+
+.login-form-container h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #3b82f6;
+  position: relative;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+/* 🔹 Add a subtle accent underline */
+.login-form-container h2::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #9333ea);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* 🔹 On hover: animate underline for a sleek effect */
+.login-form-container h2:hover::after {
+  width: 100px;
+}
+
 
 .form-group {
   margin-bottom: 1rem;
@@ -25,14 +56,25 @@ label {
 }
 
 input {
-  background-color: transparent !important;
-  color: #5a78e6 !important;
-  width: 100%;
-  padding: 0.5rem;
+  width: 90%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #3b82f6;
   border-radius: 0.5rem;
-  border: 1px solid #6e8efb;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2); /* 🌟 subtle blue shadow */
+  transition: all 0.3s ease;
 }
 
+/* 🔹 When user clicks or types (focus state) */
+input:focus {
+  outline: none;
+  border-color: #1d4ed8; /* darker blue border */
+  box-shadow: 0 0 8px rgba(29, 78, 216, 0.5), 0 2px 8px rgba(0, 0, 0, 0.15);
+  background-color: var(--background-color);
+}
 
 .btn {
   width: 100%;
@@ -43,7 +85,7 @@ input {
 }
 
 .btn-primary {
-  background-color: #6e8efb;
+  background-color: #3b82f6;
   color: white;
   font-weight: bold;
 }
@@ -94,3 +136,34 @@ input {
   background-color: #6e8efb;
   color: white;
 }
+
+.toggle-text {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-top: 1rem;
+  font-weight: 500;
+  opacity: 0.9;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.toggle-link {
+  color: #3b82f6;
+  font-weight: 600;
+  margin-left: 0.25rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* 🔹 Hover effect for link */
+.toggle-link:hover {
+  color: #2563eb; /* darker blue */
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+
+/* 🔹 Optional subtle animation when switching modes */
+.toggle-text:hover {
+  opacity: 1;
+}
+

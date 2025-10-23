@@ -19,6 +19,27 @@
   font-family: 'Inter', sans-serif;
 }
 
+input {
+  width: 90%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #3b82f6;
+  border-radius: 0.5rem;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2); /* 🌟 subtle blue shadow */
+  transition: all 0.3s ease;
+}
+
+/* 🔹 When user clicks or types (focus state) */
+input:focus {
+  outline: none;
+  border-color: #1d4ed8; /* darker blue border */
+  box-shadow: 0 0 8px rgba(29, 78, 216, 0.5), 0 2px 8px rgba(0, 0, 0, 0.15);
+  background-color: var(--background-color);
+}
+
 /* ---------------- Title Section ---------------- */
 .goal-tracking-title {
   text-align: center;
@@ -70,7 +91,7 @@
   border: none !important;
   outline: none !important;
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.30);
   overflow: hidden;
   position: relative;
   animation: fadeIn 0.5s ease-out;
@@ -79,7 +100,7 @@
 
 .goal-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.40);
 }
 
 
@@ -256,7 +277,7 @@
   padding: 1.5rem;
   border-radius: 10px;
   margin-bottom: 3rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.30);
 }
 
 .add-goal-form h2,
@@ -314,7 +335,7 @@
 /* ---------------- Weekly Weight Section ---------------- */
 .weekly-weight-section {
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.30);
   padding: 2rem;
 }
 
