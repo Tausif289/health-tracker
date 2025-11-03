@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {  ChangeDetectorRef,ChangeDetectionStrategy, Component,  effect,signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common'; // ✅ Add this import
 import { DarkModeService } from '../services/dark-mode.services';
@@ -8,13 +8,21 @@ import { DarkModeService } from '../services/dark-mode.services';
   standalone: true,
   templateUrl: './navigation-bar.html',
   styleUrls: ['./navigation-bar.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule, CommonModule] // ✅ Add CommonModule here
 })
 export class NavigationBarComponent {
   isMenuOpen = signal(false);
 
-  constructor(public darkModeService: DarkModeService) {}
+  constructor(
+    public darkModeService: DarkModeService
+  ) {
+     effect(() => {
+      console.log('Login status changed:', this.darkModeService.isLogin());
+    });
+  }
+
+  
 
   toggleMenu() {
     this.isMenuOpen.set(!this.isMenuOpen());

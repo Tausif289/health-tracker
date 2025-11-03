@@ -55,23 +55,26 @@ export class LoginComponent {
     this.http.post(endpoint, form.value).subscribe({
       next: (res: any) => {
         console.log('✅ Response:', res);
-        console.log("user",res.user);
-        console.log("type",typeof res.user);
-        console.log("after converting string",JSON.stringify(res.user));
-       function saveToLocalStorage(key: string, value: any) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (err) {
-    console.error("Error saving to localStorage", err);
-  }
-}
+        console.log('user', res.user);
+        console.log('type', typeof res.user);
+        console.log('after converting string', JSON.stringify(res.user));
+        function saveToLocalStorage(key: string, value: any) {
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch (err) {
+            console.error('Error saving to localStorage', err);
+          }
+        }
 
-// Usage:
-saveToLocalStorage('user', res.user);
-saveToLocalStorage('token', res.token);
-// ✅ Correct
+        // Usage:
+        saveToLocalStorage('user', res.user);
+        saveToLocalStorage('token', res.token);
+        // ✅ Correct
         this.userService.setUser(res.user); // ✅ store user data globally
-        this.router.navigate(['/dashboard']);
+         this.router.navigate(['/dashboard']).then(() => {
+      // ✅ Refresh page after navigation
+      window.location.reload();
+    });
       },
       error: (err) => {
         console.error('❌ Auth error:', err.error.message);
